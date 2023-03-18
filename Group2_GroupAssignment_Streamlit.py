@@ -204,34 +204,31 @@ def page_model():
 
     with col1:
         year = st.selectbox('Year', options=[0, 1], format_func=lambda x: year_values[x])
+        month = st.selectbox('Month', options=range(1, 13), format_func=lambda x: month_values[x-1])
 
     with col2:
-        month = st.selectbox('Month', options=range(1, 13), format_func=lambda x: month_values[x-1])
         day = st.selectbox('Day', options=range(1, 31))
+        hour = st.selectbox('Hour', options=range(0, 24))
 
     with col1:
         holiday = st.selectbox('Holiday', options=[0, 1], format_func=lambda x: boolean_values[x])
-        workingday = st.selectbox('Working Day', options=[0, 1], format_func=lambda x: boolean_values[x])
-
-    with col2:
-        hour = st.selectbox('Hour', options=range(0, 24))
         weekday = st.selectbox('Weekday', options=[0, 1, 2, 3, 4, 5, 6], format_func=lambda x: weekday_values[x])
 
-    with col1:
+    with col2:
         conv_factor = 41.0
         weather = st.selectbox('Weather', options=[1, 2, 3, 4], format_func=lambda x: weather_values[x-1])
         temp = st.slider('Temperature (°C)', min_value=0, max_value=int(conv_factor), step=1, value=int(0.5*conv_factor), format='%d °C')
         temp_normalized = temp / conv_factor
-        
-    with col2:
+    with col1:
         conv_factor2 = 100.0
         humidity = st.slider('Humidity (%)', min_value=0, max_value=int(conv_factor2), step=1, value=int(0.5*conv_factor2), format='%d %%')
         humidity_normalized = humidity / conv_factor2
         
-    with col1:
+    with col2:
         conv_factor1 = 67.0
         windspeed = st.slider('Wind Speed (km/h)', min_value=0, max_value=int(conv_factor1), step=1, value=int(0.5*conv_factor1), format='%d km/h')
         windspeed_normalized = windspeed / conv_factor1
+        
                 
     input_data = {
         'season': get_season(month),
@@ -240,7 +237,7 @@ def page_model():
         'hr': hour,
         'holiday': holiday,
         'weekday': weekday,
-        'workingday': workingday,
+        'workingday': 1 - holiday,
         'weathersit': weather,
         'atemp': temp_normalized,
         'hum': humidity_normalized,
@@ -261,7 +258,7 @@ def page_model():
     st.markdown(f"<p style='font-size:30px; color:green'>{rounded_prediction}</p>", unsafe_allow_html=True)
     bike_emoji = '<span style="font-size:30px"> 🚲 </span>'
     st.write(bike_emoji * rounded_prediction, unsafe_allow_html=True)
-
+    
 #the forth page is about the insights
 def page_conclusion():
     st.title(":green[Bike Sharing Analysis & Prediction] _GroupB_  :bicyclist: :woman-biking:")
