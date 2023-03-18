@@ -156,30 +156,30 @@ def comf_temp (temp_normalized):
     
 def hour_to_time_of_day(hour):
     time_of_day_dict = {
-        0: "Night",
-        1: "Night",
-        2: "Night",
-        3: "Night",
-        4: "Night",
-        5: "Night",
-        6: "Morning",
-        7: "Morning",
-        8: "Morning",
-        9: "Morning",
-        10: "Morning",
-        11: "Morning",
-        12: "Morning",
-        13: "Afternoon",
-        14: "Afternoon",
-        15: "Afternoon",
-        16: "Afternoon",
-        17: "Afternoon",
-        18: "Evening",
-        19: "Evening",
-        20: "Evening",
-        21: "Night",
-        22: "Night",
-        23: "Night"
+        0: 0,
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+        6: 1,
+        7: 1,
+        8: 1,
+        9: 1,
+        10: 1,
+        11: 1,
+        12: 1,
+        13: 2,
+        14: 2,
+        15: 2,
+        16: 2,
+        17: 3,
+        18: 3,
+        19: 3,
+        20: 3,
+        21: 0,
+        22: 0,
+        23: 0
     }
     return time_of_day_dict[hour]
 
@@ -193,7 +193,6 @@ def page_model():
                       "Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds",
                       "Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog"]
     weekday_values = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    timeofday_values = ["Morning", "Afternoon", "Evening", "Night"]
     boolean_values = ["No", "Yes"]
     year_values = ["2011", "2012"]
     month_values = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -231,14 +230,9 @@ def page_model():
         windspeed = st.slider('Wind Speed (km/h)', min_value=0, max_value=int(conv_factor1), step=1, value=int(0.5*conv_factor1), format='%d km/h')
         windspeed_normalized = windspeed / conv_factor1
         humidity_normalized = humidity / conv_factor2
-        
-    with col1:
-        time_of_day = st.selectbox('Time of the day', options=[1, 2, 3, 4], format_func=lambda x: timeofday_values[x-1])
-        
-    season = get_season(month)
-    
+                
     input_data = {
-        'season': season,
+        'season': get_season(month),
         'yr': year,
         'mnth': month,
         'hr': hour,
