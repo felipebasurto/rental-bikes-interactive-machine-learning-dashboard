@@ -128,11 +128,22 @@ def page_eda():
     tab8.plotly_chart(fig8, use_container_width=True)
     tab9.plotly_chart(fig9, use_container_width=True)
     # above is all about the second page
+
+# Auxiliary function    
+def get_season(month):
+    if month in [12, 1, 2]:
+        return 0
+    elif month in [3, 4, 5]:
+        return 1
+    elif month in [6, 7, 8]:
+        return 2
+    else:
+        return 3
     
 #the third page is about the model
 def page_model():
     model = pickle.load(open("bikeRentalsModel.pkl", "rb"))
-    df = pd.read_csv("df.csv")
+    df = pd.read_csv("preprocessed-df.csv")
     
     weather_values = ['Clear, Few clouds, Partly cloudy, Partly cloudy',
                       "Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist",
@@ -151,7 +162,6 @@ def page_model():
     col1, col2 = st.columns(2)
 
     with col1:
-        season = st.selectbox('Season', options=[1, 2, 3, 4], format_func=lambda x: season_values[x-1])
         year = st.selectbox('Year', options=[0, 1], format_func=lambda x: year_values[x])
 
     with col2:
@@ -186,6 +196,8 @@ def page_model():
 
     with col2:
         comfortable_hum = st.selectbox("Comfortable humidity", options=[0, 1], format_func=lambda x: boolean_values[x])
+        
+    season = get_season(month)
     
     input_data = {
         'season': season,
@@ -250,7 +262,7 @@ def page_annex():
         col1.metric("R2 Score", "0.86")
         col2.metric("Almost Correct Predictions", "90.13%")
         model = pickle.load(open("bikeRentalsModel.pkl", "rb"))
-        df = pd.read_csv("df.csv")
+        df = pd.read_csv("preprocessed-df.csv")
         cutoff_date = pd.to_datetime('2012-09-01')
         df["dteday"] = pd.to_datetime(df["dteday"])
         train = df.loc[df.dteday < cutoff_date]
