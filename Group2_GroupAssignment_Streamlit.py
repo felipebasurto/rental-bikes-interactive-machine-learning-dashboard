@@ -224,12 +224,14 @@ def page_model():
         temp_normalized = temp / conv_factor
         
     with col2:
-        conv_factor1 = 67.0
         conv_factor2 = 100.0
         humidity = st.slider('Humidity (%)', min_value=0, max_value=int(conv_factor2), step=1, value=int(0.5*conv_factor2), format='%d %%')
+        humidity_normalized = humidity / conv_factor2
+        
+    with col1:
+        conv_factor1 = 67.0
         windspeed = st.slider('Wind Speed (km/h)', min_value=0, max_value=int(conv_factor1), step=1, value=int(0.5*conv_factor1), format='%d km/h')
         windspeed_normalized = windspeed / conv_factor1
-        humidity_normalized = humidity / conv_factor2
                 
     input_data = {
         'season': get_season(month),
