@@ -2,8 +2,4 @@ pandas
 sklearn
 catboost == 1.1.1
 xgboost
-pickle
-Image
-time
-numpy
 streamlit
