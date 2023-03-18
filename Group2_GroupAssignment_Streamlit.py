@@ -129,7 +129,9 @@ def page_eda():
     tab9.plotly_chart(fig9, use_container_width=True)
     # above is all about the second page
 
-# Auxiliary function    
+#--------------------------------------
+
+# Auxiliary functions
 def get_season(month):
     if month in [12, 1, 2]:
         return 0
@@ -140,6 +142,47 @@ def get_season(month):
     else:
         return 3
     
+def comf_hum (humidity_normalized):
+    if humidity_normalized >= 0.25 & humidity_normalized <= 0.55:
+        return 1
+    else:
+        return 0
+    
+def comf_temp (temp_normalized):
+    if temp_normalized >= 0.40 & temp_normalized <= 0.65:
+        return 1
+    else:
+        return 0
+    
+def hour_to_time_of_day(hour):
+    time_of_day_dict = {
+        0: "Night",
+        1: "Night",
+        2: "Night",
+        3: "Night",
+        4: "Night",
+        5: "Night",
+        6: "Morning",
+        7: "Morning",
+        8: "Morning",
+        9: "Morning",
+        10: "Morning",
+        11: "Morning",
+        12: "Morning",
+        13: "Afternoon",
+        14: "Afternoon",
+        15: "Afternoon",
+        16: "Afternoon",
+        17: "Afternoon",
+        18: "Evening",
+        19: "Evening",
+        20: "Evening",
+        21: "Night",
+        22: "Night",
+        23: "Night"
+    }
+    return time_of_day_dict[hour]
+
 #the third page is about the model
 def page_model():
     model = pickle.load(open("bikeRentalsModel.pkl", "rb"))
@@ -151,7 +194,6 @@ def page_model():
                       "Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog"]
     weekday_values = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     timeofday_values = ["Morning", "Afternoon", "Evening", "Night"]
-    season_values = ["Winter", "Spring", "Summer", "Fall"]
     boolean_values = ["No", "Yes"]
     year_values = ["2011", "2012"]
     month_values = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -192,10 +234,6 @@ def page_model():
         
     with col1:
         time_of_day = st.selectbox('Time of the day', options=[1, 2, 3, 4], format_func=lambda x: timeofday_values[x-1])
-        comfortable_temp = st.selectbox("Comfortable temperature", options=[0, 1], format_func=lambda x: boolean_values[x])
-
-    with col2:
-        comfortable_hum = st.selectbox("Comfortable humidity", options=[0, 1], format_func=lambda x: boolean_values[x])
         
     season = get_season(month)
     
@@ -212,9 +250,9 @@ def page_model():
         'hum': humidity_normalized,
         'windspeed': windspeed_normalized,
         'day' : day,
-        'time_of_day' : time_of_day,
-        'comfortable_temp' : comfortable_temp,
-        'comfortable_humidity' : comfortable_hum
+        'time_of_day' : hour_to_time_of_day[hour],
+        'comfortable_temp' : comf_temp(temp_normalized),
+        'comfortable_humidity' : comf_hum(humidity_normalized)
     }
 
     input_df = pd.DataFrame([input_data])
