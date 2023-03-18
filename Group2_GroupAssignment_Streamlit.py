@@ -244,7 +244,7 @@ def page_model():
         'hum': humidity_normalized,
         'windspeed': windspeed_normalized,
         'day' : day,
-        'time_of_day' : hour_to_time_of_day[hour],
+        'time_of_day' : hour_to_time_of_day(hour),
         'comfortable_temp' : comf_temp(temp_normalized),
         'comfortable_humidity' : comf_hum(humidity_normalized)
     }
